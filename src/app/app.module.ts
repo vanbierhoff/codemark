@@ -1,12 +1,11 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
 import { AppComponent } from './app.component';
-import { NavigatonModule } from './modules/navigation/navigation.module';
+import { ViewImageModule } from './modules/navigation/view-image/view-image.module';
 
 @NgModule({
 	declarations: [AppComponent],
-	imports: [BrowserModule, NavigatonModule],
+	imports: [BrowserModule, ViewImageModule],
 	providers: [],
 	bootstrap: [AppComponent]
 })
