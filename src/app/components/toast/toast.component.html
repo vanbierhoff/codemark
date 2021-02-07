@@ -1,0 +1,24 @@
+<div #toast>
+    <div class="toasts" 
+ 
+  >
+        <div [ngClass]="msg.typeMessage"  class="toast-item" *ngFor="let msg, let i of meessages" 
+        [@messageState]="{
+            value: 'visible',
+            params: {
+                showTransformParams: showTransformOptions,
+                hideTransformParams: hideTransformOptions,
+                showTransitionParams: showTransitionOptions,
+                hideTransitionParams: hideTransitionOptions
+            }
+        }"
+      >
+
+         <span class="toast-message">
+            {{msg.message}}
+         </span>  
+
+         <button class="button-closed" (click)="deleteMessage(i)">closed</button>
+        </div>
+    </div>
+</div>
