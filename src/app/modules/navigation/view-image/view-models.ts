@@ -1,8 +1,20 @@
 export interface TagsCollection {
-	[key: string]: any;
+	[key: string]: Gifs[];
 }
 
 export interface Gifs {
-	composite: any;
-	[key: string]: string[];
+	isComposite: boolean;
+	img: string[];
+	tagName: string;
+	error: boolean;
+}
+
+export interface ErrorNoGifs {
+	error: boolean;
+}
+
+export interface ResponseServer {
+	data: {
+		image_url: string;
+	};
 }
