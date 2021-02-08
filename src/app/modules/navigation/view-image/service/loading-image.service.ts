@@ -27,7 +27,7 @@ export class LoadingImageService {
 			catchError(err => {
 				this.messageService.add({
 					typeMessage: 'error',
-					message: err.error.message
+					message: err.error?.message || err.message
 				});
 				return throwError(err);
 			}),

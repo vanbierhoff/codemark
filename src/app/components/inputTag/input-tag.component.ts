@@ -1,10 +1,14 @@
-import { Component, forwardRef, OnInit } from '@angular/core';
 import {
-	ControlValueAccessor,
-	FormControl,
-	NG_VALUE_ACCESSOR
-} from '@angular/forms';
-import { filter } from 'rxjs/operators';
+	AfterViewInit,
+	Component,
+	ElementRef,
+	forwardRef,
+	ViewChild
+} from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { fromEvent } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 export const INPUT_CONTROLS_ACCESS = {
 	provide: NG_VALUE_ACCESSOR,
@@ -12,25 +16,45 @@ export const INPUT_CONTROLS_ACCESS = {
 	multi: true
 };
 
+@UntilDestroy()
 @Component({
 	selector: 'input-tag',
 	template: `
-		<input [formControl]="value" />
+		<input #input [ngModel]="control" />
 	`,
+	styleUrls: [],
 	providers: [INPUT_CONTROLS_ACCESS]
 })
-export class InputTagComponent implements OnInit, ControlValueAccessor {
-	value: FormControl = new FormControl('');
+export class InputTagComponent implements AfterViewInit, ControlValueAccessor {
+	@ViewChild('input') input: ElementRef;
 
-	TAG_REGEXP: RegExp = /[Aa-Zz,]/gi;
+	valueInput = '';
 
-	ngOnInit() {
-		this.value.valueChanges
-			.pipe(filter(value => this.TAG_REGEXP.test(value)))
-			.subscribe(val => this.value.setValue(val));
+	control: string;
+
+	TAG_REGEXP = /[a-z,]/i;
+
+	ngAfterViewInit() {
+		fromEvent(this.input.nativeElement, 'input')
+			.pipe(
+				untilDestroyed(this),
+				map<any, string>((value: InputEvent) => {
+					if (this.TAG_REGEXP.test(value.data as string)) {
+						return this.input.nativeElement.value;
+					}
+					const REGEXP = new RegExp(value.data as string, 'ig');
+					return this.input.nativeElement.value.replace(REGEXP, '');
+				})
+			)
+			.subscribe(value => {
+				this.input.nativeElement.value = value;
+				this.onChange(this.input.nativeElement.value);
+			});
 	}
 
-	writeValue() {}
+	writeValue(val: any) {
+		this.control = val;
+	}
 
 	onChange: Function = () => {};
 

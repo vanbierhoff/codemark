@@ -4,11 +4,23 @@
     width: 90%;
     gap: 8px;
     justify-content: center;
-    margin: 0 auto;
+    margin: 20px  auto 0;
+}
+
+.gallery__item{
+   display: flex;
+   flex-wrap: wrap;
+   width: 90%;
+   gap: 8px;
+   justify-content: center;
+   margin: 0 auto;
 }
 
 .title{
    width: 100%;
+   font-family: cursive;
+   font-size: 35px;
+   text-align: center;
 }
 
 .standart-img{
