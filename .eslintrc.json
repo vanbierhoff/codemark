@@ -25,6 +25,7 @@
 		"@typescript-eslint/no-shadow": "off",
         "@typescript-eslint/no-use-before-define": "off",
         "no-unused-expressions": ["error", {  "allowTernary": true }],
+        "no-restricted-globals": "off",
         "angular/di": ["off"],
 		"class-methods-use-this": "off",
         "lines-between-class-members": "off",
