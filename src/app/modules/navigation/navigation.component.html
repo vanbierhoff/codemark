@@ -1,13 +1,15 @@
 <nav>
-        <input-tag [(ngModel)]="tag"></input-tag>
-        <button class="button-load" #buttonDownload [disabled]="isLoad$ ">
-           
+      <form [formGroup]="form">
+        <input-tag formControlName="tag" ></input-tag>
+        <button class="button-load" #buttonDownload [disabled]="isLoad$ "  type="submit">
+       
                 <span *ngIf="!isLoad$  else loading"> download</span>
                 <ng-template #loading>
                          <span>loading</span>
                  </ng-template>
 
         </button>
+  
         <button class="button-clear" (click)="clearEvent()"> clear</button>
         <button class="button-group" (click)="toggleEvent()">
 
@@ -17,4 +19,5 @@
                 </ng-template>
 
         </button>
+</form>
 </nav>

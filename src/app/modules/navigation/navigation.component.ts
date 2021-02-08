@@ -7,6 +7,7 @@ import {
 	Output,
 	ViewChild
 } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { MessageService } from 'app/components/toast/message-service/message.service';
 
@@ -20,7 +21,10 @@ import { switchMap, takeWhile } from 'rxjs/operators';
 	styleUrls: ['./navigation.component.scss']
 })
 export class NavigationComponent implements AfterViewInit {
-	constructor(private messageService: MessageService) {}
+	constructor(
+		private messageService: MessageService,
+		private fb: FormBuilder
+	) {}
 
 	@ViewChild('buttonDownload') buttonDownload: ElementRef;
 
@@ -32,11 +36,13 @@ export class NavigationComponent implements AfterViewInit {
 
 	@Output() clear = new EventEmitter();
 
-	@Input() tag = '';
-
 	@Input() setTag$: Observable<string>;
 
 	toggler = false;
+
+	form: FormGroup = this.fb.group({
+		tag: new FormControl('')
+	});
 
 	inerval$ = interval(5000);
 
@@ -45,38 +51,39 @@ export class NavigationComponent implements AfterViewInit {
 			.pipe(
 				untilDestroyed(this),
 				switchMap(() => {
-					if (this.tag === 'delay') {
+					if (this.form.controls.tag.value === 'delay') {
 						return this.inerval$.pipe(
 							takeWhile(() => {
-								return this.tag === 'delay';
+								return this.form.controls.tag.value === 'delay';
 							})
 						);
 					}
-					return of(this.tag);
+					return of(this.form.controls.tag.value);
 				})
 			)
 			.subscribe(() => {
-				this.loadingEvent();
+				const tag = this.form.controls.tag.value;
+				this.loadingEvent(tag);
 			});
 
 		this.setTag$.subscribe(tag => {
-			this.tag = tag;
+			this.form.controls.tag.patchValue(tag);
 		});
 	}
 
-	loadingEvent() {
-		if (this.tag === 'delay') {
+	loadingEvent(tag: string) {
+		if (tag === 'delay') {
 			this.loading.emit(['random']);
 			return;
 		}
-		if (this.tag === '') {
+		if (tag === '') {
 			this.messageService.add({
 				typeMessage: 'info',
 				message: 'Введите тэг'
 			});
 			return;
 		}
-		const tags: string[] = this.tag.split(',');
+		const tags: string[] = tag.split(',');
 		this.loading.emit(tags);
 	}
 
@@ -86,7 +93,7 @@ export class NavigationComponent implements AfterViewInit {
 	}
 
 	clearEvent() {
-		this.tag = '';
+		this.form.controls.tag.patchValue('');
 		this.clear.emit();
 	}
 }
