@@ -84,4 +84,9 @@ export class NavigationComponent implements AfterViewInit {
 		this.toggler = !this.toggler;
 		this.toggleGrouping.emit(this.toggler);
 	}
+
+	clearEvent() {
+		this.tag = '';
+		this.clear.emit();
+	}
 }
