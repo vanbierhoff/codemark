@@ -1,0 +1,25 @@
+<toast></toast>
+
+<navigation (loading)="loading($event)" 
+            (toggleGrouping)=" toggleGrouping($event)" 
+            (clear)="clearGallery()"
+            [isLoad$]="isLoad$ | async "></navigation>
+
+<section class="gallery">
+  <div class="gallery__item" 
+      *ngFor="let tag of viewTagCollection | keyvalue  ">
+    <div class="title" *ngIf="isGroup">{{tag.key | getNameGroup}}</div>
+      <ng-container>
+       <div [ngClass]="{
+                          'composite-img':gifs.isComposite,
+                          'standart-img': !gifs.isComposite
+                        }" *ngFor="let gifs of viewTagCollection[tag.key]">
+
+
+          <div class="wrapper-img" *ngFor="let img of gifs.img">
+            <img class="img" [src]="img" alt="">
+         </div>
+      </div>
+    </ng-container>
+  </div>
+</section>
