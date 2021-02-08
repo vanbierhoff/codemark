@@ -38,7 +38,9 @@ export class ViewImageComponent implements OnInit {
 	}
 
 	setTag(tag: string) {
-		this.setTag$.next(tag);
+		const REGEXP = /-/gi;
+
+		this.setTag$.next(tag.replace(REGEXP, ','));
 	}
 
 	loading(tags: string[]) {
