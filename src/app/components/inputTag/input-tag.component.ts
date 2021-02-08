@@ -34,6 +34,8 @@ export class InputTagComponent implements AfterViewInit, ControlValueAccessor {
 
 	control: FormControl = new FormControl();
 
+	REGEXP = /-/gi;
+
 	TAG_REGEXP = /[a-z,]/i;
 
 	ngAfterViewInit() {
@@ -55,7 +57,7 @@ export class InputTagComponent implements AfterViewInit, ControlValueAccessor {
 	}
 
 	writeValue(val: any) {
-		this.control.patchValue(val);
+		this.control.patchValue(val.replace(this.REGEXP, ','));
 	}
 
 	onChange: Function = () => {};
