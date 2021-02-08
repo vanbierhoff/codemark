@@ -23,6 +23,8 @@ export class ViewImageComponent implements OnInit {
 
 	isComposite = false;
 
+	setTag$: Subject<string> = new Subject();
+
 	tagCollectionSort: TagsCollection = {};
 
 	tagCoolectionAll: TagsCollection = {
@@ -33,6 +35,10 @@ export class ViewImageComponent implements OnInit {
 
 	ngOnInit() {
 		this.viewTagCollection = this.tagCoolectionAll;
+	}
+
+	setTag(tag: string) {
+		this.setTag$.next(tag);
 	}
 
 	loading(tags: string[]) {
