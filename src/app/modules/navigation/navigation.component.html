@@ -1,0 +1,20 @@
+<nav>
+        <input-tag [(ngModel)]="tag"></input-tag>
+        <button class="button-load" #buttonDownload [disabled]="isLoad$ ">
+           
+                <span *ngIf="!isLoad$  else loading"> download</span>
+                <ng-template #loading>
+                         <span>loading</span>
+                 </ng-template>
+
+        </button>
+        <button class="button-clear" (click)="clear.emit()"> clear</button>
+        <button class="button-group" (click)="toggleEvent()">
+
+                <span *ngIf="!toggler  else ungroup"> group</span>
+                <ng-template #ungroup>
+                         <span> ongroup </span> 
+                </ng-template>
+
+        </button>
+</nav>

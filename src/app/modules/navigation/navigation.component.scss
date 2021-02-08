@@ -1,0 +1,15 @@
+nav{
+    display: flex;
+    justify-content: center;
+}
+
+.button{
+
+    &-load{
+     background: greenyellow;   
+    }
+
+    &-clear{
+        background: red;
+    }
+}
