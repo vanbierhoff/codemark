@@ -3,6 +3,7 @@
 <navigation (loading)="loading($event)" 
             (toggleGrouping)=" toggleGrouping($event)" 
             (clear)="clearGallery()"
+            [setTag$]="setTag$"
             [isLoad$]="isLoad$ | async "></navigation>
 
 <section class="gallery">
@@ -17,7 +18,7 @@
 
 
           <div class="wrapper-img" *ngFor="let img of gifs.img">
-            <img class="img" [src]="img" alt="">
+            <img class="img" [src]="img" alt="" (click)="setTag(gifs.tagName)">
          </div>
       </div>
     </ng-container>

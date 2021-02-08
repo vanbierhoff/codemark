@@ -8,6 +8,7 @@ import {
 	ViewChild
 } from '@angular/core';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { MessageService } from 'app/components/toast/message-service/message.service';
 
 import { fromEvent, interval, Observable, of } from 'rxjs';
 import { switchMap, takeWhile } from 'rxjs/operators';
@@ -19,6 +20,8 @@ import { switchMap, takeWhile } from 'rxjs/operators';
 	styleUrls: ['./navigation.component.scss']
 })
 export class NavigationComponent implements AfterViewInit {
+	constructor(private messageService: MessageService) {}
+
 	@ViewChild('buttonDownload') buttonDownload: ElementRef;
 
 	@Input() isLoad$: Observable<boolean>;
@@ -29,7 +32,9 @@ export class NavigationComponent implements AfterViewInit {
 
 	@Output() clear = new EventEmitter();
 
-	tag: string;
+	@Input() tag = '';
+
+	@Input() setTag$: Observable<string>;
 
 	toggler = false;
 
@@ -53,11 +58,22 @@ export class NavigationComponent implements AfterViewInit {
 			.subscribe(() => {
 				this.loadingEvent();
 			});
+
+		this.setTag$.subscribe(tag => {
+			this.tag = tag;
+		});
 	}
 
 	loadingEvent() {
 		if (this.tag === 'delay') {
 			this.loading.emit(['random']);
+			return;
+		}
+		if (this.tag === '') {
+			this.messageService.add({
+				typeMessage: 'info',
+				message: 'Введите тэг'
+			});
 			return;
 		}
 		const tags: string[] = this.tag.split(',');

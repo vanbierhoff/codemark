@@ -5,7 +5,11 @@ import {
 	forwardRef,
 	ViewChild
 } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import {
+	ControlValueAccessor,
+	FormControl,
+	NG_VALUE_ACCESSOR
+} from '@angular/forms';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { fromEvent } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -20,7 +24,7 @@ export const INPUT_CONTROLS_ACCESS = {
 @Component({
 	selector: 'input-tag',
 	template: `
-		<input #input [ngModel]="control" />
+		<input #input [formControl]="control" />
 	`,
 	styleUrls: [],
 	providers: [INPUT_CONTROLS_ACCESS]
@@ -28,9 +32,7 @@ export const INPUT_CONTROLS_ACCESS = {
 export class InputTagComponent implements AfterViewInit, ControlValueAccessor {
 	@ViewChild('input') input: ElementRef;
 
-	valueInput = '';
-
-	control: string;
+	control: FormControl = new FormControl();
 
 	TAG_REGEXP = /[a-z,]/i;
 
@@ -47,13 +49,13 @@ export class InputTagComponent implements AfterViewInit, ControlValueAccessor {
 				})
 			)
 			.subscribe(value => {
-				this.input.nativeElement.value = value;
+				this.control.patchValue(value);
 				this.onChange(this.input.nativeElement.value);
 			});
 	}
 
 	writeValue(val: any) {
-		this.control = val;
+		this.control.patchValue(val);
 	}
 
 	onChange: Function = () => {};
